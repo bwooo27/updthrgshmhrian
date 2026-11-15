@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ANGLER | Stock Investment</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #080b0a;
+    --card: #111714;
+    --green: #a3ff68;
+    --gray: #929b95;
+    --border: #ffffff12;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: white;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* NAVBAR */
+
+.navbar {
+    height: 80px;
+    padding: 0 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,11,10,.9);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(15px);
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: var(--green);
+}
+
+.nav-links {
+    display: flex;
+    gap: 35px;
+}
+
+.nav-links a {
+    color: var(--gray);
+    font-size: 14px;
+    transition: .3s;
+}
+
+.nav-links a:hover {
+    color: var(--green);
+}
+
+.nav-button {
+    padding: 11px 22px;
+    border: 1px solid var(--green);
+    border-radius: 30px;
+    color: var(--green);
+    font-size: 13px;
+    transition: .3s;
+}
+
+.nav-button:hover {
+    background: var(--green);
+    color: black;
+}
+
+.menu {
+    display: none;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* HERO */
+
+.hero {
+    padding: 100px 8%;
+    min-height: 550px;
+    display: flex;
+    align-items: center;
+    background:
+    radial-gradient(circle at 80% 50%, #a3ff6815, transparent 35%),
+    linear-gradient(120deg, #080b0a, #101b13);
+}
+
+.hero-content {
+    max-width: 750px;
+    animation: fadeUp 1s ease;
+}
+
+.hero-label {
+    color: var(--green);
+    letter-spacing: 4px;
+    font-size: 12px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: clamp(50px, 8vw, 95px);
+    line-height: 1;
+    letter-spacing: -4px;
+}
+
+.hero h1 span {
+    color: var(--green);
+}
+
+.hero p {
+    color: var(--gray);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 25px 0;
+}
+
+.hero-btn {
+    display: inline-block;
+    background: var(--green);
+    color: black;
+    padding: 15px 28px;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.hero-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 25px #a3ff6850;
+}
+
+/* GENERAL SECTION */
+
+.section {
+    padding: 70px 8%;
+}
+
+.section-label {
+    color: var(--green);
+    letter-spacing: 3px;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 35px;
+    margin-bottom: 35px;
+}
+
+.section-title span {
+    color: var(--green);
+}
+
+/* MARKET OVERVIEW */
+
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.market-card {
+    background: var(--card);
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: .3s;
+}
+
+.market-card:hover {
+    border-color: var(--green);
+    transform: translateY(-5px);
+}
+
+.market-card p {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.market-card h2 {
+    margin: 15px 0;
+    font-size: 27px;
+}
+
+.positive {
+    color: var(--green);
+    font-size: 13px;
+}
+
+.negative {
+    color: #ff6565;
+    font-size: 13px;
+}
+
+/* CHART */
+
+.chart-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.chart-header h3 {
+    font-size: 22px;
+}
+
+.chart-price {
+    font-size: 30px;
+    color: var(--green);
+    margin-top: 10px;
+}
+
+.chart-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.chart-buttons button {
+    background: #1b241e;
+    color: white;
+    border: 1px solid var(--border);
+    padding: 8px 13px;
+    border-radius: 5px;
+}
+
+.chart-buttons button.active {
+    background: var(--green);
+    color: black;
+}
+
+.chart-wrapper {
+    height: 320px;
+    position: relative;
+}
+
+/* STOCK TABLE */
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.stock-table th,
+.stock-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.stock-table th {
+    color: var(--gray);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.stock-table td {
+    font-size: 14px;
+}
+
+.stock-name {
+    font-weight: 700;
+}
+
+.stock-code {
+    color: var(--gray);
+    font-size: 11px;
+    display: block;
+}
+
+.watch-btn {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 7px 12px;
+    border-radius: 5px;
+}
+
+/* EDUCATION */
+
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.edu-card {
+    background: var(--card);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: .3s;
+}
+
+.edu-card:hover {
+    transform: translateY(-7px);
+    border-color: var(--green);
+}
+
+.edu-card span {
+    color: var(--green);
+    font-size: 35px;
+}
+
+.edu-card h3 {
+    margin: 20px 0 12px;
+}
+
+.edu-card p {
+    color: var(--gray);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* CALCULATOR */
+
+.calculator {
+    background: var(--card);
+    padding: 35px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    max-width: 650px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: var(--gray);
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    background: #080b0a;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    font-size: 16px;
+}
+
+.input-group input:focus {
+    border-color: var(--green);
+}
+
+.calc-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--green);
+    border: none;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    background: #a3ff6810;
+    border: 1px solid #a3ff6840;
+    border-radius: 7px;
+    display: none;
+}
+
+.result h3 {
+    color: var(--green);
+    margin-top: 10px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 50px 8%;
+    background: #050705;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+footer p {
+    color: var(--gray);
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: .8s;
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 900px) {
+
+    .market-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .education-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        padding: 25px;
+        background: #080b0a;
+        flex-direction: column;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .menu {
+        display: block;
+    }
+
+    .nav-button {
+        display: none;
+    }
+}
+
+@media(max-width: 600px) {
+
+    .hero {
+        padding: 80px 7%;
+    }
+
+    .section {
+        padding: 55px 6%;
+    }
+
+    .market-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stock-table th,
+    .stock-table td {
+        padding: 12px 8px;
+        font-size: 11px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="logo">INVESMENT<span></span></div>
+    <nav class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#market">Market</a>
+        <a href="#stocks">Stocks</a>
+        <a href="#education">Education</a>
+        <a href="#calculator">Calculator</a>
+    </nav>
+
+    <a href="#market" class="nav-button">Explore Market ↗</a>
+
+    <div class="menu" id="menu">☰</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="hero-label">
+            WELCOME TO WEB INVESTMENT BWOO
+        </div>
+
+        <h1>
+            INVEST<br>
+            <span>SMARTER.</span>
+        </h1>
+
+        <p>
+            Discover the stock market, understand investment opportunities,
+            and build your financial future with knowledge and strategy.
+        </p>
+
+        <a href="#market" class="hero-btn">
+            Explore Market ↗
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- MARKET OVERVIEW -->
+
+<section class="section" id="market">
+
+    <div class="section-label">
+        01 — MARKET OVERVIEW
+    </div>
+
+    <h2 class="section-title">
+        MARKET <span>INSIGHTS.</span>
+    </h2>
+
+    <div class="market-grid">
+        <div class="market-card">
+            <p>IHSG</p>
+            <h2 id="price-IHSG">Memuat...</h2>
+            <span id="change-IHSG" class="positive">Mengambil data...</span>
+        </div>
+        <div class="market-card">
+            <p>BBRI</p>
+            <h2 id="price-BBRI">Memuat...</h2>
+            <span id="change-BBRI" class="positive">Mengambil data...</span>
+        </div>
+        <div class="market-card">
+            <p>BBCA</p>
+            <h2 id="price-BBCA">Memuat...</h2>
+            <span id="change-BBCA" class="positive">Mengambil data...</span>
+        </div>
+        <div class="market-card">
+            <p>TLKM</p>
+            <h2 id="price-TLKM">Memuat...</h2>
+            <span id="change-TLKM" class="positive">Mengambil data...</span>
+        </div>
+    </div>
+    <p style="color:#777;font-size:11px;margin-top:15px;">
+        Sumber: Yahoo Finance (data harian). Harga mengikuti data pasar terakhir yang tersedia, bukan kuotasi real-time. 
+        <span id="lastUpdated">Memuat waktu pembaruan...</span>
+    </p>
+
+</section>
+
+
+<!-- STOCK CHART -->
+
+<section class="section">
+
+    <div class="section-label">
+        02 — MARKET ANALYTICS
+    </div>
+
+    <h2 class="section-title">
+        STOCK <span>ANALYSIS.</span>
+    </h2>
+
+    <div class="chart-container">
+
+        <div class="chart-header">
+
+            <div>
+                <h3>BBRI / BANK BRI</h3>
+                <div class="chart-price" id="chartPrice">
+                    Rp4.120
+                </div>
+                <span class="positive">+2.45% ▲</span>
+            </div>
+
+            <div class="chart-buttons">
+                <button class="active" data-period="1D">1D</button>
+                <button data-period="1W">1W</button>
+                <button data-period="1M">1M</button>
+                <button data-period="1Y">1Y</button>
+            </div>
+
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="stockChart"></canvas>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STOCK LIST -->
+
+<section class="section" id="stocks">
+
+    <div class="section-label">
+        03 — STOCK WATCHLIST
+    </div>
+
+    <h2 class="section-title">
+        POPULAR <span>STOCKS.</span>
+    </h2>
+
+    <div style="overflow-x:auto;">
+
+        <table class="stock-table">
+
+            <thead>
+                <tr>
+                    <th>COMPANY</th>
+                    <th>PRICE</th>
+                    <th>CHANGE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>
+                        <span class="stock-name">Bank BRI</span>
+                        <span class="stock-code">BBRI</span>
+                    </td>
+                    <td>4,120</td>
+                    <td class="positive">+2.45%</td>
+                    <td><button class="watch-btn">+ Watch</button></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="stock-name">Bank Central Asia</span>
+                        <span class="stock-code">BBCA</span>
+                    </td>
+                    <td>9,450</td>
+                    <td class="negative">-0.35%</td>
+                    <td><button class="watch-btn">+ Watch</button></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="stock-name">Telkom Indonesia</span>
+                        <span class="stock-code">TLKM</span>
+                    </td>
+                    <td>3,180</td>
+                    <td class="positive">+1.10%</td>
+                    <td><button class="watch-btn">+ Watch</button></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="stock-name">Astra International</span>
+                        <span class="stock-code">ASII</span>
+                    </td>
+                    <td>5,050</td>
+                    <td class="positive">+0.65%</td>
+                    <td><button class="watch-btn">+ Watch</button></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- EDUCATION -->
+
+<section class="section" id="education">
+
+    <div class="section-label">
+        04 — INVESTMENT EDUCATION
+    </div>
+
+    <h2 class="section-title">
+        LEARN TO <span>INVEST.</span>
+    </h2>
+
+    <div class="education-grid">
+
+        <div class="edu-card">
+            <span>01</span>
+            <h3>Fundamental Analysis</h3>
+            <p>
+                Pelajari kondisi keuangan perusahaan,
+                laporan keuangan, laba, dan prospek bisnis.
+            </p>
+        </div>
+
+        <div class="edu-card">
+            <span>02</span>
+            <h3>Technical Analysis</h3>
+            <p>
+                Pelajari grafik harga, candlestick,
+                support, resistance, dan indikator teknikal.
+            </p>
+        </div>
+
+        <div class="edu-card">
+            <span>03</span>
+            <h3>Risk Management</h3>
+            <p>
+                Pelajari cara mengelola risiko,
+                diversifikasi, dan menjaga modal investasi.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- INVESTMENT CALCULATOR -->
+
+<section class="section" id="calculator">
+
+    <div class="section-label">
+        05 — INVESTMENT CALCULATOR
+    </div>
+
+    <h2 class="section-title">
+        CALCULATE YOUR <span>PROFIT.</span>
+    </h2>
+
+    <div class="calculator">
+
+        <div class="input-group">
+            <label>Modal Investasi (Rp)</label>
+            <input type="number" id="capital" placeholder="Contoh: 1000000">
+        </div>
+
+        <div class="input-group">
+            <label>Harga Beli per Lembar (Rp)</label>
+            <input type="number" id="buyPrice" placeholder="Contoh: 4000">
+        </div>
+
+        <div class="input-group">
+            <label>Harga Jual per Lembar (Rp)</label>
+            <input type="number" id="sellPrice" placeholder="Contoh: 4500">
+        </div>
+
+        <button class="calc-btn" onclick="calculateProfit()">
+            Calculate Profit ↗
+        </button>
+
+        <div class="result" id="result">
+
+            <p>Estimasi keuntungan / kerugian</p>
+
+            <h3 id="profitValue"></h3>
+
+            <p id="profitPercent"></p>
+
+            <p id="lotInfo" style="margin-top:10px;"></p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="logo">
+        ANGLER<span>.</span>
+    </div>
+
+    <p>
+        INVEST SMARTER. BUILD YOUR FUTURE.
+    </p>
+
+    <p style="margin-top:35px;">
+        © 2026 ANGLER INVESTMENT PLATFORM
+    </p>
+
+    <p>
+        Harga saham diambil dari Yahoo Finance dan merupakan data harian tertunda/penutupan terakhir yang tersedia.
+        Data dapat gagal dimuat jika layanan pihak ketiga membatasi akses. Bukan rekomendasi investasi.
+    </p>
+
+</footer>
+
+
+<script>
+
+// MOBILE MENU
+
+const menu = document.getElementById("menu");
+const navLinks = document.getElementById("navLinks");
+
+menu.addEventListener("click", () => {
+
+    navLinks.classList.toggle("active");
+
+    menu.textContent =
+        navLinks.classList.contains("active") ? "✕" : "☰";
+
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navLinks.classList.remove("active");
+        menu.textContent = "☰";
+
+    });
+
+});
+
+
+// DATA SAHAM DARI YAHOO FINANCE
+// Kode Yahoo Finance: IHSG = ^JKSE, saham BEI menggunakan akhiran .JK.
+const STOCKS = {
+    IHSG: "^JKSE",
+    BBRI: "BBRI.JK",
+    BBCA: "BBCA.JK",
+    TLKM: "TLKM.JK",
+    ASII: "ASII.JK"
+};
+
+const formatNumber = value => new Intl.NumberFormat("id-ID", {
+    maximumFractionDigits: 2
+}).format(value);
+
+const formatRupiah = value => "Rp" + new Intl.NumberFormat("id-ID", {
+    maximumFractionDigits: 0
+}).format(value);
+
+function setChange(el, change) {
+    if (!el) return;
+    const positive = change >= 0;
+    el.className = positive ? "positive" : "negative";
+    el.textContent = `${positive ? "+" : ""}${change.toFixed(2)}% ${positive ? "▲" : "▼"}`;
+}
+
+function showUnavailable(symbol, message = "Data tidak tersedia") {
+    const price = document.getElementById(`price-${symbol}`);
+    const change = document.getElementById(`change-${symbol}`);
+    if (price) price.textContent = "—";
+    if (change) change.textContent = message;
+    const tablePrice = document.getElementById(`table-price-${symbol}`);
+    const tableChange = document.getElementById(`table-change-${symbol}`);
+    if (tablePrice) tablePrice.textContent = "—";
+    if (tableChange) tableChange.textContent = "—";
+}
+
+async function fetchYahooChart(symbol, range = "5d", interval = "1d") {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    const result = json?.chart?.result?.[0];
+    if (!result) throw new Error("Data kosong");
+    return result;
+}
+
+let stockChart;
+let bbriHistory = [];
+
+function updateChart(period = "1D") {
+    if (!stockChart || !bbriHistory.length) return;
+    const count = { "1D": 1, "1W": 5, "1M": 22, "1Y": 252 }[period] || 1;
+    const rows = bbriHistory.slice(-count);
+    const labels = rows.map(row => {
+        const d = new Date(row.time * 1000);
+        return period === "1D"
+            ? d.toLocaleDateString("id-ID", { day: "2-digit", month: "short" })
+            : d.toLocaleDateString("id-ID", { day: "2-digit", month: "short" });
+    });
+    stockChart.data.labels = labels;
+    stockChart.data.datasets[0].data = rows.map(row => row.close);
+    stockChart.update();
+}
+
+const ctx = document.getElementById("stockChart");
+stockChart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Harga BBRI",
+            data: [],
+            borderColor: "#a3ff68",
+            backgroundColor: "rgba(163,255,104,.10)",
+            fill: true,
+            tension: .4,
+            pointRadius: 2,
+            pointBackgroundColor: "#a3ff68"
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false }, ticks: { color: "#929b95" } },
+            y: { grid: { color: "#ffffff10" }, ticks: { color: "#929b95" } }
+        }
+    }
+});
+
+async function refreshStockPrices() {
+    const symbols = Object.entries(STOCKS);
+    const results = await Promise.allSettled(symbols.map(async ([key, ticker]) => {
+        const range = key === "BBRI" ? "1y" : "5d";
+        const result = await fetchYahooChart(ticker, range, "1d");
+        const quotes = result.indicators?.quote?.[0];
+        const closes = quotes?.close || [];
+        const valid = closes.map((close, i) => ({
+            close,
+            time: result.timestamp?.[i]
+        })).filter(row => Number.isFinite(row.close));
+        if (!valid.length) throw new Error("Tidak ada harga penutupan");
+        const latest = valid[valid.length - 1];
+        const previous = valid.length > 1 ? valid[valid.length - 2] : null;
+        const change = previous && previous.close !== 0
+            ? ((latest.close - previous.close) / previous.close) * 100
+            : 0;
+        return { key, latest, change, valid };
+    }));
+
+    let successCount = 0;
+    results.forEach((outcome, index) => {
+        const key = symbols[index][0];
+        if (outcome.status !== "fulfilled") {
+            console.warn(`Gagal mengambil ${key}:`, outcome.reason);
+            showUnavailable(key);
+            return;
+        }
+        successCount++;
+        const { latest, change, valid } = outcome.value;
+        const priceEl = document.getElementById(`price-${key}`);
+        const changeEl = document.getElementById(`change-${key}`);
+        if (priceEl) priceEl.textContent = key === "IHSG" ? formatNumber(latest.close) : formatRupiah(latest.close);
+        setChange(changeEl, change);
+
+        const tablePrice = document.getElementById(`table-price-${key}`);
+        const tableChange = document.getElementById(`table-change-${key}`);
+        if (tablePrice) tablePrice.textContent = formatRupiah(latest.close);
+        setChange(tableChange, change);
+
+        if (key === "BBRI") {
+            bbriHistory = valid;
+            document.getElementById("chartPrice").textContent = formatRupiah(latest.close);
+            setChange(document.getElementById("chartChange"), change);
+            const active = document.querySelector(".chart-buttons button.active");
+            updateChart(active?.dataset.period || "1D");
+        }
+    });
+
+    const now = new Date();
+    document.getElementById("lastUpdated").textContent =
+        `Terakhir diperbarui: ${now.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB`;
+    if (!successCount) {
+        document.getElementById("lastUpdated").textContent +=
+            " — Gagal mengambil data. Periksa koneksi atau batas akses penyedia data.";
+    }
+}
+
+// Muat data saat halaman dibuka; jadwalkan pembaruan berikutnya setiap 00:00 WIB.
+function scheduleMidnightRefresh() {
+    const now = new Date();
+    const jakartaNow = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+    const nextMidnight = new Date(jakartaNow);
+    nextMidnight.setHours(24, 0, 5, 0);
+    const delay = Math.max(1000, nextMidnight.getTime() - jakartaNow.getTime());
+    setTimeout(async () => {
+        await refreshStockPrices();
+        scheduleMidnightRefresh();
+    }, delay);
+}
+
+refreshStockPrices().catch(error => {
+    console.error("Gagal memperbarui harga saham:", error);
+    document.getElementById("lastUpdated").textContent = "Data belum berhasil dimuat.";
+});
+scheduleMidnightRefresh();
+
+document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) refreshStockPrices().catch(console.error);
+});
+
+
+// PILIH PERIODE GRAFIK
+document.querySelectorAll(".chart-buttons button").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".chart-buttons button")
+            .forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        updateChart(button.dataset.period);
+    });
+});
+
+
+// INVESTMENT CALCULATOR
+
+function calculateProfit() {
+
+    const capital = Number(document.getElementById("capital").value);
+
+    const buy = Number(document.getElementById("buyPrice").value);
+
+    const sell = Number(document.getElementById("sellPrice").value);
+
+    const result = document.getElementById("result");
+
+    if (
+        !Number.isFinite(capital) ||
+        !Number.isFinite(buy) ||
+        !Number.isFinite(sell) ||
+        capital <= 0 ||
+        buy <= 0 ||
+        sell <= 0
+    ) {
+
+        alert("Masukkan semua angka dengan benar!");
+
+        return;
+
+    }
+
+    // 1 LOT = 100 LEMBAR
+
+    const lot = Math.floor(capital / (buy * 100));
+
+    const shares = lot * 100;
+
+    const usedCapital = shares * buy;
+
+    const profit = (sell - buy) * shares;
+
+    const percentage = (profit / usedCapital) * 100;
+
+    const formatRupiah = value => {
+
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        }).format(value);
+
+    };
+
+    document.getElementById("profitValue").textContent =
+        (profit >= 0 ? "+" : "") + formatRupiah(profit);
+
+    document.getElementById("profitValue").style.color =
+        profit >= 0 ? "#a3ff68" : "#ff6565";
+
+    document.getElementById("profitPercent").textContent =
+        "Persentase: " + percentage.toFixed(2) + "%";
+
+    document.getElementById("lotInfo").textContent =
+        "Jumlah: " + lot + " lot (" + shares +
+        " lembar) | Modal terpakai: " + formatRupiah(usedCapital);
+
+    result.style.display = "block";
+
+}
+
+
+// SCROLL ANIMATION
+
+const observer = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            entry.target.classList.add("show");
+
+            observer.unobserve(entry.target);
+
+        }
+
+    });
+
+}, {
+    threshold: 0.1
+});
+
+document.querySelectorAll(
+    ".market-card, .edu-card, .chart-container, .stock-table, .calculator"
+).forEach(element => {
+
+    element.classList.add("reveal");
+
+    observer.observe(element);
+
+});
+
+</script>
+
+</body>
+</html>
